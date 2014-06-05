@@ -17,8 +17,14 @@
  */
 package io.github.johardi.r2rml.testsuite;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -82,6 +88,75 @@ public abstract class R2RmlBaseTest extends TestCase
       mSqlScriptFile = sqlScriptFile;
       bHasExpectedOutput = hasExpectedOutput;
    }
+
+   @Override
+   protected void setUp() throws Exception
+   {
+      java.sql.Statement stmt = null;
+      try {
+         Class.forName(getJdbcDriver());
+         Connection conn = DriverManager.getConnection(getJdbcUrl(), getDbUser(), getDbPassword());
+         stmt = conn.createStatement();
+         
+         String sqlCreateTable = readSqlScript();
+         
+         LOG.info("Create table using SQL:\n{}", sqlCreateTable);
+         stmt.executeUpdate(sqlCreateTable);
+      }
+      catch (SQLException e) {
+         LOG.error(e.getMessage());
+      }
+      finally {
+         if (stmt != null && !stmt.isClosed()) {
+            stmt.close();
+         }
+      }
+   }
+
+   private String readSqlScript() throws IOException
+   {
+      StringBuilder sql = new StringBuilder();
+      
+      URL sqlScriptUrl = new URL(mSqlScriptFile);
+      BufferedReader br = new BufferedReader(new InputStreamReader(sqlScriptUrl.openStream()));
+      try {
+         String line = "";
+         boolean needNewline = false;
+         while ((line = br.readLine()) != null) {
+            if (needNewline) {
+               sql.append(System.lineSeparator());
+            }
+            sql.append(line);
+            needNewline = true;
+         }
+         return sql.toString();
+      }
+      finally {
+         if (br != null) {
+            br.close();
+         }
+      }
+   }
+
+   /**
+    * Returns the JDBC driver name
+    */
+   protected abstract String getJdbcDriver();
+
+   /**
+    * Returns the JDBC connection string URL
+    */
+   protected abstract String getJdbcUrl();
+
+   /**
+    * Returns the database user name with CREATE TABLE permission enabled
+    */
+   protected abstract String getDbUser();
+
+   /**
+    * Returns the database password for the associated user name.
+    */
+   protected abstract String getDbPassword();
 
    @Override
    protected void runTest() throws Exception
