@@ -1,0 +1,18 @@
+R2RmlTestSuite Framework
+Copyright 2014 Josef Hardi <josef.hardi@gmail.com>
+-------------------------------------------------------------------------------
+
+Source code contributions
+-------------------------
+
+This product includes code developed by Aduna
+(http://www.openrdf.org/). License: http://opensource.org/licenses/BSD-3-Clause
+
+Third party libraries
+---------------------
+
+This product contains software developed by Aduna
+(http://www.openrdf.org/). License: http://opensource.org/licenses/BSD-3-Clause
+
+This product includes software developed by Quality Open Software, QOS.ch
+(www.slf4j.org/). License: http://opensource.org/licenses/MIT
