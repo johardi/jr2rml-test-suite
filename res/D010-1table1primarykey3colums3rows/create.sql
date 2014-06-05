@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS "Country Info";
 CREATE TABLE "Country Info" (
   "Country Code" INTEGER PRIMARY KEY,
   "Name" VARCHAR(100),

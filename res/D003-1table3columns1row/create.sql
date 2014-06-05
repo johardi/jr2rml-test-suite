@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS "Student";
 CREATE TABLE "Student" (
 "ID" INTEGER,
 "FirstName" VARCHAR(50),

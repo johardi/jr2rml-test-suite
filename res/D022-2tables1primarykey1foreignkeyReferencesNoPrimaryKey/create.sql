@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS "Target"
+DROP TABLE IF EXISTS "Source"
+
 CREATE TABLE "Target" (
 	"litattr1" INT,
 	-- PRIMARY KEY("PK"),

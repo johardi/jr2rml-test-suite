@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS "IOUs";
 CREATE TABLE "IOUs" (
       "fname" VARCHAR(20),
       "lname"  VARCHAR(20),

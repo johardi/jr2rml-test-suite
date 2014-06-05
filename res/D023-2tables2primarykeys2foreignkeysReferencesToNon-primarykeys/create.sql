@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS "Target"
+DROP TABLE IF EXISTS "Source"
+
 CREATE TABLE "Target" (
 	"PK" INT,
 	PRIMARY KEY("PK"),

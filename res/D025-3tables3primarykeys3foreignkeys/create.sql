@@ -1,3 +1,7 @@
+DROP TABLE IF EXISTS "Addresses"
+DROP TABLE IF EXISTS "Department"
+DROP TABLE IF EXISTS "People"
+
 CREATE TABLE "Addresses" (
 	"ID" INT,
 	PRIMARY KEY("ID"),
