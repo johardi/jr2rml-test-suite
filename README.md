@@ -11,6 +11,13 @@ Troubleshooting
 ---------------
 TBA
 
+Notes
+-----
+There are several but minor modifications that I did in the original test suite to allow this tool running the tests in batch.
+
+* Adding `DROP TABLE IF EXISTS` in each *create.sql* file to reset the test data. However, not all DBMS supports this expression and users need to adjust it accordingly.
+* Removing double quotes for table or column names in all *r2rml.ttl* test mapping files.
+
 License
 -------
 This software is licensed under the GPL v3 license, quoted below.
