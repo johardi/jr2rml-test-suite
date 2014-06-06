@@ -100,7 +100,7 @@ public abstract class R2RmlBaseTest extends TestCase
          
          String sqlCreateTable = readSqlScript();
          
-         LOG.info("Create table using SQL:\n{}", sqlCreateTable);
+         LOG.info("Creating tables and inserting data...");
          stmt.executeUpdate(sqlCreateTable);
       }
       catch (SQLException e) {
