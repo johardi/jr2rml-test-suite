@@ -299,7 +299,7 @@ public abstract class R2RmlBaseTest extends TestCase
       
       Repository repo = createNewRepository();
       RepositoryConnection conn = repo.getConnection();
-      ManifestTest.addTurtle(conn, new URL(manifestUrl), manifestUrl);
+      ManifestTest.addTurtle(conn, new URL(manifestUrl), "http://purl.org/NET/rdb2rdf-test#");
       
       String manifestId = getManifestName(repo, conn, manifestUrl);
       String sqlScriptFile = getSqlScriptFile(repo, conn, manifestUrl);
