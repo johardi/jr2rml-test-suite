@@ -45,7 +45,7 @@ import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.rio.helpers.BasicParserSettings;
 import org.openrdf.rio.helpers.StatementCollector;
-import org.openrdf.rio.turtle.TurtleParser;
+import org.openrdf.rio.ntriples.NTriplesParser;
 import org.openrdf.sail.memory.MemoryStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -241,7 +241,7 @@ public abstract class R2RmlBaseTest extends TestCase
 
    protected final Set<Statement> getExpectedGraph() throws Exception
    {
-      TurtleParser parser = new TurtleParser();
+      NTriplesParser parser = new NTriplesParser();
       parser.getParserConfig().addNonFatalError(BasicParserSettings.FAIL_ON_UNKNOWN_DATATYPES);
       parser.getParserConfig().addNonFatalError(BasicParserSettings.VERIFY_DATATYPE_VALUES);
       parser.getParserConfig().addNonFatalError(BasicParserSettings.NORMALIZE_DATATYPE_VALUES);
