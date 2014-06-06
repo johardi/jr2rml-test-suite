@@ -66,13 +66,13 @@ public abstract class R2RmlBaseTest extends TestCase
             boolean hasExpectedOutput);   // as specified in rdb2rdftest:hasExpectedOutput
    }
 
-   protected String mTestIri;
-   protected String mTestId;
-   protected String mTestTitle;
-   protected String mTestOutput;
-   protected String mMappingFile;
-   protected String mSqlScriptFile;
-   protected boolean bHasExpectedOutput;
+   private String mTestIri;
+   private String mTestId;
+   private String mTestTitle;
+   private String mTestOutput;
+   private String mMappingFile;
+   private String mSqlScriptFile;
+   private boolean bHasExpectedOutput;
 
    private static final Logger LOG = LoggerFactory.getLogger(R2RmlBaseTest.class);
 
@@ -158,6 +158,79 @@ public abstract class R2RmlBaseTest extends TestCase
     */
    protected abstract String getDbPassword();
 
+   /**
+    * Returns the graph statements from executing the R2RML processor.
+    */
+   protected abstract Set<Statement> getActualGraph() throws Exception;
+
+   /**
+    * Returns test IRI which is a unique codification ID for each
+    * <code>rdb2rdftest:R2RML</code> test.
+    */
+   protected String getTestIri()
+   {
+      return mTestIri;
+   }
+
+   /**
+    * Returns test identifier as specified by <code>dcterms:identifier</code> in
+    * the manifest file.
+    */
+   protected String getTestId()
+   {
+      return mTestId;
+   }
+
+   /**
+    * Returns test title as specified by <code>dcterms:title</code> in the
+    * manifest file.
+    */
+   protected String getTestTitle()
+   {
+      return mTestTitle;
+   }
+
+   /**
+    * Returns test output file as specified by <code>rdb2rdftest:output</code>
+    * in the manifest file. It includes the full path of the file location.
+    * 
+    * The method will return an empty string if {@link hasExpectedOutput()}
+    * returns <code>false</code>.
+    */
+   protected String getTestOutput()
+   {
+      return mTestOutput;
+   }
+
+   /**
+    * Returns test mapping document as specified by
+    * <code>db2rdftest:mappingDocument</code> in the manifest file. It includes
+    * the full path of the file location.
+    */
+   protected String getMappingFile()
+   {
+      return mMappingFile;
+   }
+
+   /**
+    * Returns SQL script file for table setup as specified by
+    * <code>rdb2rdftest:sqlScriptFile</code> in the manifest file. It includes
+    * the full path of the file location.
+    */
+   protected String getSqlScriptFile()
+   {
+      return mSqlScriptFile;
+   }
+
+   /**
+    * Returns test output indicator as specified by
+    * <code>rdb2rdftest:hasExpectedOutput</code> in the manifest file.
+    */
+   protected boolean hasExpectedOutput()
+   {
+      return bHasExpectedOutput;
+   }
+
    @Override
    protected void runTest() throws Exception
    {
@@ -165,8 +238,6 @@ public abstract class R2RmlBaseTest extends TestCase
       Set<Statement> expectedResult = getExpectedGraph();
       compareGraphs(actualResult, expectedResult);
    }
-
-   protected abstract Set<Statement> getActualGraph() throws Exception;
 
    protected final Set<Statement> getExpectedGraph() throws Exception
    {
