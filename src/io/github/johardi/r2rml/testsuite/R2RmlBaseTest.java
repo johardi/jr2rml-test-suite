@@ -239,7 +239,7 @@ public abstract class R2RmlBaseTest extends TestCase
       compareGraphs(actualResult, expectedResult);
    }
 
-   protected final Set<Statement> getExpectedGraph() throws Exception
+   private final Set<Statement> getExpectedGraph() throws Exception
    {
       NTriplesParser parser = new NTriplesParser();
       parser.getParserConfig().addNonFatalError(BasicParserSettings.FAIL_ON_UNKNOWN_DATATYPES);
@@ -260,7 +260,7 @@ public abstract class R2RmlBaseTest extends TestCase
       return result;
    }
 
-   protected final void compareGraphs(Set<Statement> actual, Set<Statement> expected) throws Exception
+   private final void compareGraphs(Set<Statement> actual, Set<Statement> expected) throws Exception
    {
       if (!ModelUtil.equals(expected, actual)) {
          StringBuilder message = new StringBuilder(128);
