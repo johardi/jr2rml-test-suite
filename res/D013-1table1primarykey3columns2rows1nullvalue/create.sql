@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS "Person"
+DROP TABLE IF EXISTS "Person";
 CREATE TABLE "Person" (
 "ID" integer,
 "Name" varchar(50),

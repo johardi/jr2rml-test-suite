@@ -48,19 +48,19 @@
 <TriplesMap2>
     a rr:TriplesMap;
 
-	rr:logicalTable [ rr:tableName  "\"Sport\"" ];
+	rr:logicalTable [ rr:tableName  "Sport" ];
 	
-    rr:subjectMap [ rr:template "http://example.com/{\"ID\"}/{\"Description\"}"; ];
+    rr:subjectMap [ rr:template "http://example.com/{ID}/{Description}"; ];
 
     rr:predicateObjectMap
     [ 
       rr:predicate	ex:id ; 
-      rr:objectMap	[ rr:column "\"ID\""; ]
+      rr:objectMap	[ rr:column "ID"; ]
     ];
 
     rr:predicateObjectMap
     [ 
       rr:predicate	ex:description ; 
-      rr:objectMap	[ rr:column "\"Description\"" ]
+      rr:objectMap	[ rr:column "Description" ]
     ]
     .

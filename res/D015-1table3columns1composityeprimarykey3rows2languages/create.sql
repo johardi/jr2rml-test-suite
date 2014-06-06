@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS "Country"
+DROP TABLE IF EXISTS "Country";
 CREATE TABLE "Country" (
   "Code" VARCHAR(2),
   "Name" VARCHAR(100),

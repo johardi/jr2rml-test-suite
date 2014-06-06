@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS "Addresses"
-DROP TABLE IF EXISTS "Department"
-DROP TABLE IF EXISTS "People"
+DROP TABLE IF EXISTS "People";
+DROP TABLE IF EXISTS "Addresses";
+DROP TABLE IF EXISTS "Department";
 
 CREATE TABLE "Addresses" (
 	"ID" INT,

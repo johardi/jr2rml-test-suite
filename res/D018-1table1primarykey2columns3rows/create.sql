@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS "Student"
+DROP TABLE IF EXISTS "Student";
 CREATE TABLE "Student" (
 "ID" INTEGER,
 "Name" CHAR(15) 

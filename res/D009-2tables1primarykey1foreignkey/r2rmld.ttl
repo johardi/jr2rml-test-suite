@@ -14,12 +14,12 @@
         GROUP BY "Name"
         """ ];
 	
-    rr:subjectMap [ rr:template "http://example.com/resource/student_{\"Name\"}"; ]; 
+    rr:subjectMap [ rr:template "http://example.com/resource/student_{Name}"; ]; 
 	
     rr:predicateObjectMap
     [ 
       rr:predicate	foaf:name ; 
-      rr:objectMap	[ rr:column "\"Name\""; ];
+      rr:objectMap	[ rr:column "Name"; ];
     ];
 
    rr:predicateObjectMap

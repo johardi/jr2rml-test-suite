@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS "Target"
-DROP TABLE IF EXISTS "Source"
+DROP TABLE IF EXISTS "Source";
+DROP TABLE IF EXISTS "Target";
 
 CREATE TABLE "Target" (
 	"litattr1" INT,

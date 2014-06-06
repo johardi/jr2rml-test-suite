@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS "Employee"
+DROP TABLE IF EXISTS "Employee";
 CREATE TABLE "Employee" (
 "ID" INTEGER,
 "FirstName" VARCHAR(50),

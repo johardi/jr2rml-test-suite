@@ -14,10 +14,10 @@
                        """
                        ];
     
-	rr:subjectMap [ rr:column "\"FirstName\"" ]; 
+	rr:subjectMap [ rr:column "FirstName" ]; 
 	rr:predicateObjectMap
     [ 
       rr:predicate		foaf:name; 
-      rr:objectMap		[ rr:column "\"FirstName\"" ];
+      rr:objectMap		[ rr:column "FirstName" ];
     ];
 .

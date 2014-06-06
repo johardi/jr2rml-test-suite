@@ -17,12 +17,12 @@
 						rr:sqlVersion rr:SQL1979 				   
                        ];
 
-    rr:subjectMap [ rr:template "http://example.com/Student/{\"ID\"}/{\"FirstName\"}-{\"LastName\"}";
+    rr:subjectMap [ rr:template "http://example.com/Student/{ID}/{FirstName}-{LastName}";
                     rr:class foaf:Person  ];
 	
     rr:predicateObjectMap
     [ 
       rr:predicate		ex:id ; 
-      rr:objectMap		[ rr:column "\"ID\""; ]
+      rr:objectMap		[ rr:column "ID"; ]
     ];
      .

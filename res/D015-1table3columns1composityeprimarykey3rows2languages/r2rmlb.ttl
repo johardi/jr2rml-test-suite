@@ -15,12 +15,12 @@
 					   WHERE "Lan" = 'EN';
                        """ ] ;
 	
-    rr:subjectMap [ rr:template "http://example.com/{\"Code\"}" ]; 
+    rr:subjectMap [ rr:template "http://example.com/{Code}" ]; 
 	
     rr:predicateObjectMap
     [ 
       rr:predicate		rdfs:label;
-      rr:objectMap		[ rr:column "\"Name\""; rr:language "english" ]
+      rr:objectMap		[ rr:column "Name"; rr:language "english" ]
     ]
     .
 	
@@ -33,11 +33,11 @@
 					   WHERE "Lan" = 'ES';
                        """ ] ;
 	
-    rr:subjectMap [ rr:template "http://example.com/{\"Code\"}" ]; 
+    rr:subjectMap [ rr:template "http://example.com/{Code}" ]; 
 	
     rr:predicateObjectMap
     [ 
       rr:predicate		rdfs:label;
-      rr:objectMap		[ rr:column "\"Name\""; rr:language "spanish" ]
+      rr:objectMap		[ rr:column "Name"; rr:language "spanish" ]
     ]
     .	

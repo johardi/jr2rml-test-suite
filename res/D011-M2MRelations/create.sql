@@ -1,6 +1,6 @@
+DROP TABLE IF EXISTS "Student_Sport";
 DROP TABLE IF EXISTS "Student";
 DROP TABLE IF EXISTS "Sport";
-DROP TABLE IF EXISTS "Student_Sport";
 
 CREATE TABLE "Student" (
 "ID" integer PRIMARY KEY,
