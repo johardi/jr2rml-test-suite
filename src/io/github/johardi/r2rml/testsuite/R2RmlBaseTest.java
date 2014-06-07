@@ -23,9 +23,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import junit.framework.TestCase;
@@ -74,6 +78,10 @@ public abstract class R2RmlBaseTest extends TestCase
    private String mSqlScriptFile;
    private boolean bHasExpectedOutput;
 
+   private boolean bTestSucceed = true;
+
+   private Connection mDbConn;
+
    private static final Logger LOG = LoggerFactory.getLogger(R2RmlBaseTest.class);
 
    public R2RmlBaseTest(String testIri, String testId, String testTitle, String testOutput,
@@ -92,25 +100,34 @@ public abstract class R2RmlBaseTest extends TestCase
    @Override
    protected void setUp() throws Exception
    {
+      LOG.info("Running {} test case", getTestId());
+      
       java.sql.Statement stmt = null;
       try {
          Class.forName(getJdbcDriver());
-         Connection conn = DriverManager.getConnection(getJdbcUrl(), getDbUser(), getDbPassword());
-         stmt = conn.createStatement();
-         
-         String sqlCreateTable = readSqlScript();
+         mDbConn = DriverManager.getConnection(getJdbcUrl(), getDbUser(), getDbPassword());
+         stmt = mDbConn.createStatement();
          
          LOG.info("Creating tables and inserting data...");
+         String sqlCreateTable = readSqlScript();
          stmt.executeUpdate(sqlCreateTable);
       }
       catch (SQLException e) {
          LOG.error(e.getMessage());
+         bTestSucceed = false;
       }
       finally {
          if (stmt != null && !stmt.isClosed()) {
             stmt.close();
          }
       }
+   }
+
+   @Override
+   protected void tearDown() throws Exception
+   {
+      cleanDatabase();
+      printTestStatus();
    }
 
    private String readSqlScript() throws IOException
@@ -157,11 +174,6 @@ public abstract class R2RmlBaseTest extends TestCase
     * Returns the database password for the associated user name.
     */
    protected abstract String getDbPassword();
-
-   /**
-    * Returns the graph statements from executing the R2RML processor.
-    */
-   protected abstract Set<Statement> getActualGraph() throws Exception;
 
    /**
     * Returns test IRI which is a unique codification ID for each
@@ -231,12 +243,33 @@ public abstract class R2RmlBaseTest extends TestCase
       return bHasExpectedOutput;
    }
 
+   /**
+    * Runs the R2RML processing action and generates RDF triple graphs. Later
+    * the result will be compared to the expected output by overriding the
+    * method {@link getActualGraph()}.
+    */
+   protected abstract void runProcessor() throws Exception;
+
+   /**
+    * Returns the graph statements from executing the R2RML processor. The
+    * execution must be performed by overriding method {@link runProcessor()}.
+    */
+   protected abstract Set<Statement> getActualGraph() throws Exception;
+
    @Override
    protected void runTest() throws Exception
    {
-      Set<Statement> actualResult = getActualGraph();
-      Set<Statement> expectedResult = getExpectedGraph();
-      compareGraphs(actualResult, expectedResult);
+      try {
+         runProcessor();
+         Set<Statement> actualResult = getActualGraph();
+         Set<Statement> expectedResult = getExpectedGraph();
+         compareGraphs(actualResult, expectedResult);
+      }
+      catch (Exception e) {
+         cleanDatabase();
+         bTestSucceed = false;
+         fail(e.getMessage());
+      }
    }
 
    private final Set<Statement> getExpectedGraph() throws Exception
@@ -283,6 +316,7 @@ public abstract class R2RmlBaseTest extends TestCase
          StringUtil.appendN('=', getName().length(), message);
          message.append("========================\n");
          
+         bTestSucceed = false;
          LOG.error(message.toString());
          fail(message.toString());
       }
@@ -408,6 +442,84 @@ public abstract class R2RmlBaseTest extends TestCase
       }
       finally {
          results.close();
+      }
+   }
+
+   private void cleanDatabase() throws Exception
+   {
+      if (mDbConn.isClosed()) {
+         return;
+      }
+      java.sql.Statement stmt = mDbConn.createStatement();
+      try {
+         LOG.info("Dropping tables...");
+         List<String> tableNames = getTableNames();
+         for (String tableName : tableNames) {
+            String sqlDropTable = String.format("DROP TABLE \"%s\"", tableName);
+            stmt.executeUpdate(sqlDropTable);
+         }
+      }
+      catch (SQLException e) {
+         LOG.error(e.getMessage());
+      }
+      finally {
+         if (stmt != null && !stmt.isClosed()) {
+            stmt.close();
+         }
+         if (mDbConn != null && !mDbConn.isClosed()) {
+            mDbConn.close();
+         }
+      }
+   }
+
+   private List<String> getTableNames() throws SQLException
+   {
+      List<String> toReturn = new ArrayList<String>();
+      DatabaseMetaData meta = mDbConn.getMetaData();
+      ResultSet rs = meta.getTables(null, null, "%", new String[] {"TABLE"});
+      try {
+         while (rs.next()) {
+            String tableName = rs.getString("TABLE_NAME");
+            if (hasReference(tableName, meta)) {
+               // Give a higher priority for table that has FK
+               toReturn.add(0, tableName);
+            }
+            else {
+               toReturn.add(tableName);
+            }
+         }
+      }
+      finally {
+         if (rs != null && !rs.isClosed()) {
+            rs.close();
+         }
+      }
+      return toReturn;
+   }
+
+   private boolean hasReference(String tableName, DatabaseMetaData meta) throws SQLException
+   {
+      ResultSet rs = null;
+      boolean toReturn = false;
+      try {
+         rs = meta.getImportedKeys(null, null, tableName);
+         toReturn = rs.next();
+      }
+      finally {
+         if (rs != null && !rs.isClosed()) {
+            rs.close();
+         }
+      }
+      return toReturn;
+   }
+
+   private void printTestStatus()
+   {
+      if (bTestSucceed) {
+         LOG.info("Test OK.\n");
+      }
+      else {
+         LOG.info("Test FAILED.\n");
       }
    }
 }
