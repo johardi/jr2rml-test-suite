@@ -17,5 +17,6 @@
 	<classpathentry kind="lib" path="lib/sesame-sail-api-2.7.11.jar"/>
 	<classpathentry kind="lib" path="lib/sesame-queryalgebra-evaluation-2.7.11.jar"/>
 	<classpathentry kind="lib" path="lib/sesame-sail-inferencer-2.7.11.jar"/>
+	<classpathentry kind="lib" path="lib/sesame-queryparser-serql-2.7.11.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
