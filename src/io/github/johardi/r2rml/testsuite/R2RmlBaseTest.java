@@ -97,6 +97,74 @@ public abstract class R2RmlBaseTest extends TestCase
       bHasExpectedOutput = hasExpectedOutput;
    }
 
+   /**
+    * Returns test IRI which is a unique codification ID for each
+    * <code>rdb2rdftest:R2RML</code> test.
+    */
+   protected String getTestIri()
+   {
+      return mTestIri;
+   }
+
+   /**
+    * Returns test identifier as specified by <code>dcterms:identifier</code> in
+    * the manifest file.
+    */
+   protected String getTestId()
+   {
+      return mTestId;
+   }
+
+   /**
+    * Returns test title as specified by <code>dcterms:title</code> in the
+    * manifest file.
+    */
+   protected String getTestTitle()
+   {
+      return mTestTitle;
+   }
+
+   /**
+    * Returns test output file as specified by <code>rdb2rdftest:output</code>
+    * in the manifest file. It includes the full path of the file location.
+    * 
+    * The method will return an empty string if {@link hasExpectedOutput()}
+    * returns <code>false</code>.
+    */
+   protected String getTestOutput()
+   {
+      return mTestOutput;
+   }
+
+   /**
+    * Returns test mapping document as specified by
+    * <code>db2rdftest:mappingDocument</code> in the manifest file. It includes
+    * the full path of the file location.
+    */
+   protected String getMappingFile()
+   {
+      return mMappingFile;
+   }
+
+   /**
+    * Returns SQL script file for table setup as specified by
+    * <code>rdb2rdftest:sqlScriptFile</code> in the manifest file. It includes
+    * the full path of the file location.
+    */
+   protected String getSqlScriptFile()
+   {
+      return mSqlScriptFile;
+   }
+
+   /**
+    * Returns test output indicator as specified by
+    * <code>rdb2rdftest:hasExpectedOutput</code> in the manifest file.
+    */
+   protected boolean hasExpectedOutput()
+   {
+      return bHasExpectedOutput;
+   }
+
    @Override
    protected void setUp() throws Exception
    {
@@ -174,74 +242,6 @@ public abstract class R2RmlBaseTest extends TestCase
     * Returns the database password for the associated user name.
     */
    protected abstract String getDbPassword();
-
-   /**
-    * Returns test IRI which is a unique codification ID for each
-    * <code>rdb2rdftest:R2RML</code> test.
-    */
-   protected String getTestIri()
-   {
-      return mTestIri;
-   }
-
-   /**
-    * Returns test identifier as specified by <code>dcterms:identifier</code> in
-    * the manifest file.
-    */
-   protected String getTestId()
-   {
-      return mTestId;
-   }
-
-   /**
-    * Returns test title as specified by <code>dcterms:title</code> in the
-    * manifest file.
-    */
-   protected String getTestTitle()
-   {
-      return mTestTitle;
-   }
-
-   /**
-    * Returns test output file as specified by <code>rdb2rdftest:output</code>
-    * in the manifest file. It includes the full path of the file location.
-    * 
-    * The method will return an empty string if {@link hasExpectedOutput()}
-    * returns <code>false</code>.
-    */
-   protected String getTestOutput()
-   {
-      return mTestOutput;
-   }
-
-   /**
-    * Returns test mapping document as specified by
-    * <code>db2rdftest:mappingDocument</code> in the manifest file. It includes
-    * the full path of the file location.
-    */
-   protected String getMappingFile()
-   {
-      return mMappingFile;
-   }
-
-   /**
-    * Returns SQL script file for table setup as specified by
-    * <code>rdb2rdftest:sqlScriptFile</code> in the manifest file. It includes
-    * the full path of the file location.
-    */
-   protected String getSqlScriptFile()
-   {
-      return mSqlScriptFile;
-   }
-
-   /**
-    * Returns test output indicator as specified by
-    * <code>rdb2rdftest:hasExpectedOutput</code> in the manifest file.
-    */
-   protected boolean hasExpectedOutput()
-   {
-      return bHasExpectedOutput;
-   }
 
    /**
     * Runs the R2RML processing action and generates RDF triple graphs. Later
