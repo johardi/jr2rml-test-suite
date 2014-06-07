@@ -192,35 +192,26 @@ public abstract class R2RmlBaseTest extends TestCase
    }
 
    @Override
+   protected void runTest() throws Exception
+   {
+      try {
+         runProcessor();
+         Set<Statement> actualResult = getActualGraph();
+         Set<Statement> expectedResult = getExpectedGraph();
+         compareGraphs(actualResult, expectedResult);
+      }
+      catch (Exception e) {
+         cleanDatabase();
+         bTestSucceed = false;
+         fail(e.getMessage());
+      }
+   }
+
+   @Override
    protected void tearDown() throws Exception
    {
       cleanDatabase();
       printTestStatus();
-   }
-
-   private String readSqlScript() throws IOException
-   {
-      StringBuilder sql = new StringBuilder();
-      
-      URL sqlScriptUrl = new URL(mSqlScriptFile);
-      BufferedReader br = new BufferedReader(new InputStreamReader(sqlScriptUrl.openStream()));
-      try {
-         String line = "";
-         boolean needNewline = false;
-         while ((line = br.readLine()) != null) {
-            if (needNewline) {
-               sql.append(System.lineSeparator());
-            }
-            sql.append(line);
-            needNewline = true;
-         }
-         return sql.toString();
-      }
-      finally {
-         if (br != null) {
-            br.close();
-         }
-      }
    }
 
    /**
@@ -256,77 +247,35 @@ public abstract class R2RmlBaseTest extends TestCase
     */
    protected abstract Set<Statement> getActualGraph() throws Exception;
 
-   @Override
-   protected void runTest() throws Exception
-   {
-      try {
-         runProcessor();
-         Set<Statement> actualResult = getActualGraph();
-         Set<Statement> expectedResult = getExpectedGraph();
-         compareGraphs(actualResult, expectedResult);
-      }
-      catch (Exception e) {
-         cleanDatabase();
-         bTestSucceed = false;
-         fail(e.getMessage());
-      }
-   }
-
-   private final Set<Statement> getExpectedGraph() throws Exception
-   {
-      NTriplesParser parser = new NTriplesParser();
-      parser.getParserConfig().addNonFatalError(BasicParserSettings.FAIL_ON_UNKNOWN_DATATYPES);
-      parser.getParserConfig().addNonFatalError(BasicParserSettings.VERIFY_DATATYPE_VALUES);
-      parser.getParserConfig().addNonFatalError(BasicParserSettings.NORMALIZE_DATATYPE_VALUES);
-      parser.setPreserveBNodeIDs(true);
-      
-      Set<Statement> result = new LinkedHashSet<Statement>();
-      parser.setRDFHandler(new StatementCollector(result));
-      
-      InputStream in = new URL(mTestOutput).openStream();
-      try {
-         parser.parse(in, mTestOutput);
-      }
-      finally {
-         in.close();
-      }
-      return result;
-   }
-
-   private final void compareGraphs(Set<Statement> actual, Set<Statement> expected) throws Exception
-   {
-      if (!ModelUtil.equals(expected, actual)) {
-         StringBuilder message = new StringBuilder(128);
-         message.append("\n=============== ").append(getName()).append(" =======================\n");
-         message.append("Expected result: \n");
-         for (Statement st : expected) {
-            message.append(st.toString());
-            message.append("\n");
-         }
-         message.append("=============");
-         StringUtil.appendN('=', getName().length(), message);
-         message.append("========================\n");
-         
-         message.append("Actual result: \n");
-         for (Statement st : actual) {
-            message.append(st.toString());
-            message.append("\n");
-         }
-         message.append("=============");
-         StringUtil.appendN('=', getName().length(), message);
-         message.append("========================\n");
-         
-         bTestSucceed = false;
-         LOG.error(message.toString());
-         fail(message.toString());
-      }
-   }
-
+   /**
+    * Creates a test suite that contains all test cases mentioned in the
+    * <code>manifest.ttl</code> file, including those tests that are not
+    * reviewed.
+    *
+    * @param manifestUrl
+    *           The <code>manifest.ttl</code> file location.
+    * @param factory
+    *           An object factory to create this class instance.
+    * @return A test suite.
+    */
    public static TestSuite suite(String manifestUrl, Factory factory) throws Exception
    {
       return suite(manifestUrl, factory, false);
    }
 
+   /**
+    * Creates a test suite that contains all test cases mentioned in the
+    * <code>manifest.ttl</code> file.
+    * 
+    * @param manifestUrl
+    *           The <code>manifest.ttl</code> file location.
+    * @param factory
+    *           An object factory to create this class instance.
+    * @param onlyReviewedTests
+    *           To filter whether un-reviewed test should be included in the
+    *           test suite or not.
+    * @return a test suite.
+    */
    public static TestSuite suite(String manifestUrl, Factory factory, boolean onlyReviewedTests) throws Exception
    {
       String manifestRootPath = manifestUrl.substring(0, manifestUrl.lastIndexOf("/") + 1);
@@ -379,6 +328,85 @@ public abstract class R2RmlBaseTest extends TestCase
       
       LOG.info("Created test suite with " + suite.countTestCases() + " test cases.");
       return suite;
+   }
+
+   /*
+    * Private utility methods
+    */
+
+   private String readSqlScript() throws IOException
+   {
+      StringBuilder sql = new StringBuilder();
+      
+      URL sqlScriptUrl = new URL(mSqlScriptFile);
+      BufferedReader br = new BufferedReader(new InputStreamReader(sqlScriptUrl.openStream()));
+      try {
+         String line = "";
+         boolean needNewline = false;
+         while ((line = br.readLine()) != null) {
+            if (needNewline) {
+               sql.append(System.lineSeparator());
+            }
+            sql.append(line);
+            needNewline = true;
+         }
+         return sql.toString();
+      }
+      finally {
+         if (br != null) {
+            br.close();
+         }
+      }
+   }
+
+   private final Set<Statement> getExpectedGraph() throws Exception
+   {
+      NTriplesParser parser = new NTriplesParser();
+      parser.getParserConfig().addNonFatalError(BasicParserSettings.FAIL_ON_UNKNOWN_DATATYPES);
+      parser.getParserConfig().addNonFatalError(BasicParserSettings.VERIFY_DATATYPE_VALUES);
+      parser.getParserConfig().addNonFatalError(BasicParserSettings.NORMALIZE_DATATYPE_VALUES);
+      parser.setPreserveBNodeIDs(true);
+      
+      Set<Statement> result = new LinkedHashSet<Statement>();
+      parser.setRDFHandler(new StatementCollector(result));
+      
+      InputStream in = new URL(mTestOutput).openStream();
+      try {
+         parser.parse(in, mTestOutput);
+      }
+      finally {
+         in.close();
+      }
+      return result;
+   }
+
+   private final void compareGraphs(Set<Statement> actual, Set<Statement> expected) throws Exception
+   {
+      if (!ModelUtil.equals(expected, actual)) {
+         StringBuilder message = new StringBuilder(128);
+         message.append("\n=============== ").append(getName()).append(" =======================\n");
+         message.append("Expected result: \n");
+         for (Statement st : expected) {
+            message.append(st.toString());
+            message.append("\n");
+         }
+         message.append("=============");
+         StringUtil.appendN('=', getName().length(), message);
+         message.append("========================\n");
+         
+         message.append("Actual result: \n");
+         for (Statement st : actual) {
+            message.append(st.toString());
+            message.append("\n");
+         }
+         message.append("=============");
+         StringUtil.appendN('=', getName().length(), message);
+         message.append("========================\n");
+         
+         bTestSucceed = false;
+         LOG.error(message.toString());
+         fail(message.toString());
+      }
    }
 
    private static Repository createNewRepository() throws RepositoryException
