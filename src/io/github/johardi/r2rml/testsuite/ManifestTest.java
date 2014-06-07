@@ -125,7 +125,7 @@ public class ManifestTest
       conn.close();
       repository.shutDown();
       
-      LOG.info("Created aggregated test suite with " + suite.countTestCases() + " test cases.");
+      LOG.info("Created aggregated test suite with " + suite.countTestCases() + " test cases.\n");
       
       return suite;
    }
