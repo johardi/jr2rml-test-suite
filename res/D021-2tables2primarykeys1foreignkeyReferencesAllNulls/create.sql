@@ -1,6 +1,3 @@
-DROP TABLE IF EXISTS "Source";
-DROP TABLE IF EXISTS "Target";
-
 CREATE TABLE "Target" (
 	"PK" INT,
 	PRIMARY KEY("PK"),

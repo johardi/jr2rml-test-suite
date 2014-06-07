@@ -1,6 +1,3 @@
-DROP TABLE IF EXISTS "Student";
-DROP TABLE IF EXISTS "Sport";
-
 CREATE TABLE "Sport" (
 "ID" integer,
 "Name" varchar (50),

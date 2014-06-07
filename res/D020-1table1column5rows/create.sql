@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS "Student";
 CREATE TABLE "Student" (
 "Name" VARCHAR(50)
 );

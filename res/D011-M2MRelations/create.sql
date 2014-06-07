@@ -1,7 +1,3 @@
-DROP TABLE IF EXISTS "Student_Sport";
-DROP TABLE IF EXISTS "Student";
-DROP TABLE IF EXISTS "Sport";
-
 CREATE TABLE "Student" (
 "ID" integer PRIMARY KEY,
 "FirstName" varchar(50),

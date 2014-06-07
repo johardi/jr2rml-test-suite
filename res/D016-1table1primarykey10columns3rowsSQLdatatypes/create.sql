@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS "Patient";
 CREATE TABLE "Patient" (
 "ID" INTEGER,
 "FirstName" VARCHAR(50),
